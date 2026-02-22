@@ -14,12 +14,11 @@
 在线导入：一长串链接，
 
 比如：
-聆川音源(公益版) v6
+聆澜音源(公益版)
 
 本地导入：
 在压缩包内的“音源合集”文件夹中，找到相应的音源文件（.js），解压出来，然后按照路径导入即可
 
 在线导入：
 复制这一串链接，导入即可
-①https://lx.xiagua.top/script/lx
-②https://music.xiagua.top/free.js
+https://source.shiqianjiang.cn/script/lx
