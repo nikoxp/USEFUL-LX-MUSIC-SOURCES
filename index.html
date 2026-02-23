@@ -939,7 +939,7 @@
                             <i class="fas fa-archive"></i>
                             <div class="link-text">
                                 <strong>下载（点击进入Releases页面）</strong>
-                                <span>https://github.com/TZB679/USEFUL-LX-MUSIC-SOURCES/releases</span>
+                                <span>https://github.com/TZB679/USEFUL-LX-MUSIC-SOURCES/releases 以及 https://www.123912.com/s/6OBFTd-aHHZh</span>
                             </div>
                         </a>
                     </div>
@@ -1063,10 +1063,9 @@
                     <h3><i class="fas fa-tags"></i> 标签分类</h3>
                     <div class="tag-list">
                         <span class="tag">LX Music</span>
-                        <span class="tag">音源分享</span>
+                        <span class="tag">音乐分享</span>
                         <span class="tag">音乐播放器</span>
                         <span class="tag">开源项目</span>
-                        <span class="tag">Hi-Fi音质</span>
                         <span class="tag">资源整理</span>
                     </div>
                 </div>
@@ -1157,6 +1156,43 @@
         // 默认背景图URL
         const defaultBackgroundUrl = 'https://ghproxy.net/https://raw.githubusercontent.com/TZB679/USEFUL-LX-MUSIC-SOURCES/refs/heads/main/.github/workflows/Robin-UHD.jpg';
         
+        // ========== 本地存储功能 - 保留用户自定义背景 ==========
+        const STORAGE_KEY = 'lxMusicBackgroundSettings';
+        
+        // 保存设置到本地存储
+        function saveSettings() {
+            const settings = {
+                opacity: opacitySlider.value,
+                blur: blurSlider.value,
+                backgroundSrc: backgroundImage.src
+            };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+        }
+        
+        // 加载保存的设置
+        function loadSettings() {
+            const savedSettings = localStorage.getItem(STORAGE_KEY);
+            if (savedSettings) {
+                try {
+                    const settings = JSON.parse(savedSettings);
+                    
+                    // 恢复滑块值
+                    opacitySlider.value = settings.opacity || 70;
+                    blurSlider.value = settings.blur || 3;
+                    
+                    // 恢复背景图片（如果是本地图片，src会是dataURL）
+                    if (settings.backgroundSrc && settings.backgroundSrc !== defaultBackgroundUrl) {
+                        backgroundImage.src = settings.backgroundSrc;
+                    }
+                    
+                    // 更新显示
+                    updateBackgroundEffect();
+                } catch (e) {
+                    console.error('读取保存的设置失败', e);
+                }
+            }
+        }
+        
         // 初始化显示
         opacityValue.textContent = `${opacitySlider.value}%`;
         blurValue.textContent = `${blurSlider.value}px`;
@@ -1171,19 +1207,22 @@
             
             opacityValue.textContent = `${opacitySlider.value}%`;
             blurValue.textContent = `${blurSlider.value}px`;
+            
+            // 保存设置到本地存储
+            saveSettings();
         }
         
         opacitySlider.addEventListener('input', updateBackgroundEffect);
         blurSlider.addEventListener('input', updateBackgroundEffect);
         
-        // 图片上传处理
+        // 图片上传处理 - 并保存到本地存储
         imageUpload.addEventListener('change', function(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     backgroundImage.src = e.target.result;
-                    updateBackgroundEffect();
+                    updateBackgroundEffect(); // 这会自动保存到localStorage
                 };
                 reader.readAsDataURL(file);
             }
@@ -1195,6 +1234,9 @@
             opacitySlider.value = 70;
             blurSlider.value = 3;
             updateBackgroundEffect();
+            
+            // 清除文件输入
+            imageUpload.value = '';
         });
         
         // 切换控制面板
@@ -1278,6 +1320,9 @@
         
         // 页面加载完成后的动画
         document.addEventListener('DOMContentLoaded', function() {
+            // 加载保存的背景设置
+            loadSettings();
+            
             // 为所有元素添加淡入效果
             const cards = document.querySelectorAll('.card, .sidebar-card');
             cards.forEach((card, index) => {
