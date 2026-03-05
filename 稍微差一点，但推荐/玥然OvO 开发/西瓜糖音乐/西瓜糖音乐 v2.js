@@ -6,7 +6,7 @@
  */
 const { EVENT_NAMES, request, on, send } = globalThis.lx
 
-const API_KEY = '78ba562b6b7de94edb2f4465f1a2a1feaffe9878e3b98385c4d7e7b4cf98a524'
+const API_KEY = 'ed34917b6e3ca97d609a82e73c82599c176a07a4bcad5f5f7ab4ee95b3fa90ba'
 const API_URL = 'https://api.nki.pw/API/music_open_api.php'
 const TIMEOUT = 10000
 const USER_AGENT = 'Mozilla/5.0'
